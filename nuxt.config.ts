@@ -31,9 +31,6 @@ export default defineNuxtConfig({
       noscript: []
     }
   },
-  // typescript: {
-  //   typeCheck: true
-  // },
   modules: [
     [
       '@nuxtjs/eslint-module',
@@ -45,23 +42,13 @@ export default defineNuxtConfig({
   ],
   plugins: [
     {
-      src: '/plugins/viewUiPlus/index',
+      src: '/plugins/viewUiPlus',
       mode: 'client'
     }
   ],
   webpack: {
     loaders: {
       scss: ''
-    }
-  },
-  runtimeConfig: {
-    app: {
-      baseURL: '/',
-      buildAssetsDir: '/_nuxt/',
-      cdnURL: ''
-    },
-    public: {
-      baseURL: '/api'
     }
   },
   devServer: {
@@ -71,9 +58,9 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3000/api',
         changeOrigin: true,
-        prependPath: true
+        secure: false
       }
     }
   },

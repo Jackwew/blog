@@ -1,5 +1,5 @@
 <template>
-  <div class="bideo" ref="bideo">
+  <div ref="bideo" class="bideo">
     <video ref="backgroundVideo" class="background_video" loop muted />
   </div>
 </template>

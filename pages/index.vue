@@ -14,10 +14,10 @@
       </div>
       <div class="empty"></div>
       <section class="content-wrapper person">
-        <div class="person-img gs_reveal_fromLeft" ref="gs_reveal">
+        <div ref="gs_reveal" class="person-img gs_reveal_fromLeft">
           <img src="https://mo-easy.obs.cn-north-4.myhuaweicloud.com/www/myself_to.jpg" alt="travel" />
         </div>
-        <div class="person-info gs_reveal_fromRight" ref="gs_reveal">
+        <div ref="gs_reveal" class="person-info gs_reveal_fromRight">
           <h2>My job is a front-end / full stack development</h2>
           <p>
             我目前是一名前端开发工程师, 主要工作地在四川 - 成都, 使用的技术有: <a>Html5</a>, <a>Css/Css3</a>,
@@ -32,13 +32,43 @@
           </div>
         </div>
       </section>
+      <section class="content-wrapper project">
+        <div class="title">
+          <div class="title-letter">I LEAD THE LATEST PROJECT</div>
+          <div class="title-big">看看最近工作上最新的一些React/Vue前端项目</div>
+        </div>
+        <div v-if="projectList.length" class="project-list">
+          <div class="new-pro">
+            <img :src="primaryProject.projectImg" alt="hty" />
+            <Tooltip class="icon" content="React项目" placement="right" always theme="light">
+              <CustomIcon icon-content="react" color="#61dafb" :size="50" />
+            </Tooltip>
+            <div class="info-mess">
+              <div class="title">{{ primaryProject.projectName }}</div>
+              <div class="des">{{ primaryProject.projectDes }}</div>
+            </div>
+          </div>
+          <div class="less-pro">
+            <div v-for="pro in projectList" :key="pro.id" class="less-item">
+              <img :src="pro.projectImg" alt="global" />
+              <Tooltip class="icon" content="React项目" placement="right" always theme="light">
+                <CustomIcon icon-content="react" color="#61dafb" :size="32" />
+              </Tooltip>
+              <div class="info-mess">
+                <div class="less-title">{{ pro.projectName }}</div>
+                <div class="des">{{ pro.projectDes }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section class="content-wrapper blog">
         <div class="title">
           <div class="title-letter">LATEST BLOG POSTS</div>
           <div class="title-big">关于我做为前端开发工程师的一些想法和见解{{ foo }}</div>
         </div>
         <div class="blog-wrapper">
-          <div class="blog-item" v-for="blog in blogList" :key="blog.id">
+          <div v-for="blog in blogList" :key="blog.id" class="blog-item">
             <img :src="blog.blogImg" alt="expansions" />
             <div class="blog-title">{{ blog.blogName }}</div>
             <div class="blog-short-desc">{{ blog.shortContent }}</div>
@@ -51,16 +81,16 @@
 </template>
 <script setup>
 const foo = useFoo()
-const blogList = ref([])
+const projectList = ref([])
+const primaryProject = ref([])
 const getList = async () => {
-  const data = await useFetch('http://localhost:3000/api/project/find', {
-    method: 'get'
-  })
-  const info = unref(data).data
-  // const data = await useRequest.get('http://localhost:3000/api/user/find')
-  console.log(unref(data).data, 12345)
+  const { list } = await getProjectList({ query: { pageNum: 1, pageSize: 10 } })
+  primaryProject.value = list[0]
+  projectList.value = list.splice(1, 4)
 }
-onMounted(() => {})
+onMounted(async () => {
+  await getList()
+})
 </script>
 
 <style scoped lang="scss">
@@ -228,6 +258,131 @@ onMounted(() => {})
             z-index: 1;
             height: 100%;
             background: #e1a87a;
+          }
+        }
+      }
+    }
+  }
+  .project {
+    .project-list {
+      width: 100%;
+      height: 500px;
+      margin-top: 20px;
+      display: flex;
+      font-family: PingFangSC-Regular, sans-serif;
+      color: #fff;
+
+      .title {
+        padding: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .des {
+        font-size: 12px;
+      }
+
+      .new-pro {
+        width: 35vw;
+        height: 500px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+
+        .icon {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          transition: all 2s cubic-bezier(0.19, 1, 0.22, 1);
+          transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+          transition-duration: 2s;
+        }
+
+        .info-mess {
+          width: 100%;
+          height: 50px;
+          padding: 15px 10px;
+          background: rgba(0, 0, 0, 0.4);
+          position: absolute;
+          bottom: 0;
+          border-radius: 10px 10px 0 0;
+          cursor: pointer;
+          transition:
+            background 1s,
+            height 0.5s;
+
+          .title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+          }
+        }
+
+        &:hover {
+          .info-mess {
+            height: 130px;
+            background: rgba(0, 0, 0, 0.8);
+          }
+        }
+      }
+
+      .less-pro {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+
+        .less-item {
+          width: 50%;
+          height: 50%;
+          border: 1px solid #f5f5f5;
+          position: relative;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+            transition: all 2s cubic-bezier(0.19, 1, 0.22, 1);
+            transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+            transition-duration: 2s;
+          }
+
+          .icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+          }
+
+          .info-mess {
+            width: 100%;
+            height: 35px;
+            padding: 10px 8px;
+            background: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            bottom: 0;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            transition:
+              background 1s,
+              height 0.5s;
+
+            .less-title {
+              font-size: 16px;
+              font-weight: bold;
+              margin-bottom: 5px;
+            }
+          }
+
+          &:hover {
+            .info-mess {
+              height: 130px;
+              background: rgba(0, 0, 0, 0.8);
+            }
           }
         }
       }
