@@ -38,14 +38,21 @@ export default defineNuxtConfig({
         cache: true,
         lintOnStart: false
       }
-    ]
+    ],
+    '@nuxtjs/color-mode'
   ],
-  plugins: [
-    {
-      src: '/plugins/viewUiPlus',
-      mode: 'client'
-    }
-  ],
+  // @ts-ignore
+  colorMode: {
+    preference: 'system', // default value of $colorMode.preference
+    fallback: 'light', // fallback value if not system preference found
+    hid: 'nuxt-color-mode-script',
+    globalName: '__NUXT_COLOR_MODE__',
+    componentName: 'ColorScheme',
+    classPrefix: '',
+    classSuffix: '',
+    storageKey: 'nuxt-color-mode'
+  },
+  plugins: [],
   webpack: {
     loaders: {
       scss: ''

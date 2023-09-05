@@ -76,20 +76,45 @@
           </div>
         </div>
       </section>
+      <section class="content-wrapper life">
+        <div class="letter-title">MY INSTAGRAM FEED</div>
+        <div class="big-title">我的生活以及随手拍</div>
+        <swiper-container slides-per-view="3" grid-rows="3" mousewheel-force-to-axis="true">
+          <swiper-slide>Slide 1</swiper-slide>
+          <swiper-slide>Slide 2</swiper-slide>
+          <swiper-slide>Slide 3</swiper-slide>
+        </swiper-container>
+      </section>
     </NuxtLayout>
   </div>
 </template>
 <script setup>
 const foo = useFoo()
 const projectList = ref([])
+const blogList = ref([])
 const primaryProject = ref([])
+const photoList = ref([
+  'https://mo-easy.obs.cn-north-4.myhuaweicloud.com/www/pat/20220829163714.jpg',
+  'https://mo-easy.obs.cn-north-4.myhuaweicloud.com/www/pat/20220829163729.jpg',
+  'https://mo-easy.obs.cn-north-4.myhuaweicloud.com/www/pat/20220829163752.jpg',
+  'https://mo-easy.obs.cn-north-4.myhuaweicloud.com/www/pat/20220829163741.jpg'
+])
+// const colorMode = useColorMode()
+
 const getList = async () => {
   const { list } = await getProjectList({ query: { pageNum: 1, pageSize: 10 } })
   primaryProject.value = list[0]
   projectList.value = list.splice(1, 4)
 }
+
+const asyncGetBlogList = async () => {
+  const { list } = await getBlogData({ query: { pageNum: 1, pageSize: 10 } })
+  blogList.value = list
+}
+
 onMounted(async () => {
   await getList()
+  await asyncGetBlogList()
 })
 </script>
 
@@ -386,6 +411,75 @@ onMounted(async () => {
           }
         }
       }
+    }
+  }
+  .blog .blog-wrapper {
+    width: 100%;
+    min-height: 500px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .blog-item {
+      flex: 1;
+      margin-right: 15px;
+      overflow: hidden;
+
+      &:nth-last-child(1) {
+        margin-right: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 300px;
+        border-radius: 8px;
+      }
+
+      .blog-title {
+        height: 90px;
+        padding: 15px 0;
+        font-size: 24px;
+        overflow: hidden;
+        /*将对象作为弹性伸缩盒子模型显示*/
+        display: -webkit-box;
+        /*设置子元素排列方式*/
+        -webkit-box-orient: vertical;
+        /*设置显示的行数，多出的部分会显示为...*/
+        -webkit-line-clamp: 2;
+      }
+
+      .blog-short-desc {
+        width: 100%;
+        height: auto;
+        max-height: 90px;
+        font-size: 14px;
+        line-height: 30px;
+        overflow: hidden;
+        /*将对象作为弹性伸缩盒子模型显示*/
+        display: -webkit-box;
+        /*设置子元素排列方式*/
+        -webkit-box-orient: vertical;
+        /*设置显示的行数，多出的部分会显示为...*/
+        -webkit-line-clamp: 3;
+      }
+
+      .read-more {
+        margin-top: 20px;
+        color: #e1a87a;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+  .life {
+    .letter-title {
+      text-align: center;
+    }
+
+    .big-title {
+      text-align: center;
+      font-size: 40px;
+      margin: 15px 0;
     }
   }
 }
